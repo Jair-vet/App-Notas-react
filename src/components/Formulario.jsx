@@ -1,7 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import PropTypes from 'prop-types';
 
-
-const Formulario = () => {
+const Formulario = ({crearNota}) => {
 
     // Crear el state de Notas
     const [nota, actualizarNota] = useState({
@@ -13,8 +14,6 @@ const Formulario = () => {
     });
 
     const [error, actualizarError] = useState(false)
-
-
 
     // Función ejecuta cada que se escribe en un input
     const actualizarState = e => {
@@ -29,7 +28,7 @@ const Formulario = () => {
 
     // Cuando e usuario presiona Agregar Nota
     const submitCita = e => {
-        e.preventDefault();
+        e.preventDefault(); 
 
         // Validar 
         if( info.trim() === '' || asunto.trim() === '' || fecha.trim() === '' || hora.trim() === '' || actividad.trim() === ''){
@@ -37,14 +36,23 @@ const Formulario = () => {
             return;
         }
 
-        // Asignar un ID
+        // Eliminar el mensaje previo
+        actualizarError(false);
 
+        // Asignar un ID
+        nota.id = uuidv4();
 
         // Crear la Nota
-
+        crearNota(nota);
 
         // Reiniciar el form
-
+        actualizarNota({   // volver a mostrar el formulario vacio
+            info:       '',
+            asunto:     '',
+            fecha:      '',
+            hora:       '',
+            actividad:  '',
+        })
 
     }
 
@@ -111,6 +119,11 @@ const Formulario = () => {
      );
 }
  
+
+Formulario.propTypes = {
+    crearNota: PropTypes.func.isRequired
+}
+
 export default Formulario;
 
 
